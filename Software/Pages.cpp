@@ -191,8 +191,8 @@ void Home(void) {
 
 	static unsigned char SHT20_Order = 0;
 	static int T = 0, RH = 0;
-	unsigned int light_adc = 0, hour_dec = (Time_Buff[2] >> 4) * 10 + Time_Buff[2] & 0x0F;
-	static unsigned int pwm_value = 0, pwm_value_old = 0;
+	unsigned int light_adc = 0, hour_dec = (Time_Buff[2] / 16) * 10 + Time_Buff[2] & 0x0F;
+	static unsigned int pwm_value = 0, pwm_value_old = 1023;
 	SHT20_Order++;
 	switch (SHT20_Order) {  //refresh T & RH every 1s
 	case 1: Trigger_T(); break;
@@ -226,9 +226,9 @@ void Home(void) {
 		else if (light_adc < 40)
 			pwm_value = 0;
 		else if (light_adc > 400)
-			pwm_value = 1023;
+			pwm_value = 500;
 		else
-			pwm_value = 2.6 * light_adc - 2.2;
+			pwm_value = 1.333 * light_adc - 33.333;
 		/*Serial.print("ADC:");
 		Serial.print(light_adc);
 		Serial.print("\n");*/
